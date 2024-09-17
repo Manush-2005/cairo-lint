@@ -153,3 +153,13 @@ test_file!(
     "Else if with multiple statements",
     "Else if inside loop"
 );
+
+test_file!(
+    performance,
+    inefficient_while_comp,
+    "while loop exit condition less than",
+    "while loop exit condition less than or equal",
+    "while loop exit condition greater than",
+    "while loop exit condition greater than or equal",
+    "while loop exit condition nested"
+);

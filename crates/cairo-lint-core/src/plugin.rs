@@ -9,7 +9,8 @@ use cairo_lang_syntax::node::{TypedStablePtr, TypedSyntaxNode};
 
 use crate::lints::ifs::*;
 use crate::lints::{
-    bool_comparison, breaks, double_comparison, double_parens, duplicate_underscore_args, loops, single_match,
+    bool_comparison, breaks, double_comparison, double_parens, duplicate_underscore_args, loops, performance,
+    single_match,
 };
 
 pub fn cairo_lint_plugin_suite() -> PluginSuite {
@@ -82,6 +83,12 @@ impl AnalyzerPlugin for CairoLint {
                             Expr::Loop(expr_loop) => {
                                 loops::check_loop_match_pop_front(db, expr_loop, &mut diags, &function_body.arenas)
                             }
+                            Expr::While(expr_while) => performance::check_inefficient_while_comp(
+                                db,
+                                expr_while,
+                                &mut diags,
+                                &function_body.arenas,
+                            ),
                             _ => (),
                         };
                     }
@@ -104,6 +111,12 @@ impl AnalyzerPlugin for CairoLint {
                                 Expr::Loop(expr_loop) => {
                                     loops::check_loop_match_pop_front(db, expr_loop, &mut diags, &function_body.arenas)
                                 }
+                                Expr::While(expr_while) => performance::check_inefficient_while_comp(
+                                    db,
+                                    expr_while,
+                                    &mut diags,
+                                    &function_body.arenas,
+                                ),
                                 _ => (),
                             };
                         }
